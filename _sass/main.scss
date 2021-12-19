@@ -70,7 +70,9 @@ footer {
 
 /* Utility classes */
 /* 
-  The backslashes are required in the classes below to escape the     special forward slash and colon characters. 
+  The backslashes are required in 
+  the classes below to escape 
+  special characters (forward slash and colon).
 */
 .max-width\:measure {
   max-width: var(--measure);
@@ -104,12 +106,24 @@ footer {
   font-size: 2.25rem;
 }
 
+.text-align\:center {
+  text-align: center;
+}
+
+.text-align\:left {
+  text-align: left;
+}
+
+.text-align\:right {
+  text-align: right;
+}
+
 /* How to more easily achieve a beautiful, vertical flow and rhythm for content? https://codepen.io/piccalilli/pen/qQgxaY?editors=0110 */
 .flow {
   --flow-space: var(--s1);
 }
 
-.flow>*+* {
+.flow > * + * {
   margin-top: 1em;
   margin-top: var(--flow-space);
 }
@@ -123,7 +137,7 @@ stack-l {
   justify-content: flex-start;
 }
 
-stack-l>*+* {
+stack-l > * + * {
   margin-top: var(--s1);
 }
 
@@ -160,7 +174,7 @@ sidebar-l {
   flex-wrap: wrap;
 }
 
-sidebar-l>* {
+sidebar-l > * {
   flex-grow: 1;
 }
 
@@ -170,48 +184,21 @@ switcher-l {
   flex-wrap: wrap;
 }
 
-switcher-l>* {
+switcher-l > * {
   flex-basis: calc((var(--measure) - 100%) * 999);
   flex-grow: 1;
 }
 
-
-
-/* Buttons */
-.cta {
-  background-color: transparent;
-  color: var(--color-dark);
-}
-
-.cta,
-button {
-  font-size: inherit;
-  font-weight: 700;
-  display: inline-block;
-  cursor: pointer;
-  font-family: var(--font-special);
-  color: var(--color-light);
-  background-color: var(--color-dark);
-  padding: var(--s-1) var(--s2);
-  border-width: var(--border-thin);
-}
-
-html, body {
-  font-size: 16px;
+cover-l {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding: var(--s1);
 }
 
 body {
   background-color: var(--black);
   color: var(--bg-white);
-}
-
-.container {
-  max-width: 1280px;
-  padding: 0;
-  
-  @media (max-width: 991px) {
-    padding: 0 20px;
-  }
 }
 
 h1 {
@@ -225,7 +212,8 @@ h1 {
 }
 
 a { 
-  color: var(--bg-white); 
+  color: var(--bg-white);
+  text-decoration: underline !important; 
 
   &.styled-link {
     color: var(--aqua);  
