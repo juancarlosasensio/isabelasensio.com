@@ -46,7 +46,7 @@
   background-color: inherit;
   font-family: inherit;
   color: inherit;
-  overflow-wrap: break-word;
+  overflow-wrap: break-all;
   margin: 0;
   padding: 0;
   border: 0 solid;
@@ -203,7 +203,7 @@ body {
 
 h1 {
   font-family: Georgia, 'Times New Roman', Times, serif;
-  font-size: 4rem;
+  font-size: var(--s4);
 }
 
 .section-title {

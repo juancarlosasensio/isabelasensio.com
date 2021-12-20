@@ -12,7 +12,8 @@ button {
   cursor: pointer;
   font-family: var(--font-special);
   color: var(--color-light);
-  background-color: var(--color-dark);
+  // background-color: var(--color-dark);
+  background-color: var(--black);
   padding: var(--s-1) var(--s2);
   border-width: var(--border-thin);
 }
