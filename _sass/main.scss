@@ -189,11 +189,92 @@ switcher-l > * {
   flex-grow: 1;
 }
 
+/* Cover custom el basic styles... */
 cover-l {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
   padding: var(--s1);
+}
+
+/* Grid custom el basic styles... */
+grid-l {
+  display: grid;
+  grid-gap: var(--s1);
+  align-content: start;
+  grid-template-columns: 100%;
+}
+
+/* Frame custom el basic styles... */
+frame-l {
+  display: block;
+  position: relative;
+  padding-bottom: calc(6 / 9 * 100%);
+}
+
+frame-l > * {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+frame-l > img,
+frame-l > video {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+/* Reel custom el basic styles... */
+reel-l {
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-color: var(--color-light) var(--color-dark);
+}
+
+reel-l > * {
+  flex: 0 0 var(--item-width);
+}
+
+reel-l > img {
+  height: 100%;
+  flex-basis: auto;
+  width: auto;
+}
+
+reel-l::-webkit-scrollbar {
+  height: 1rem;
+}
+
+reel-l::-webkit-scrollbar-track {
+  background-color: var(--color-dark);
+}
+
+reel-l::-webkit-scrollbar-thumb {
+  background-color: var(--color-dark);
+  background-image: linear-gradient(var(--color-dark) 0, var(--color-dark) 0.25rem, var(--color-light) 0.25rem, var(--color-light) 0.75rem, var(--color-dark) 0.75rem);
+}
+
+/* Imposter custom el basic styles... */
+imposter-l {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Icon custom el basic styles... */
+icon-l svg {
+  height: 0.75em;
+  height: 1cap;
+  width: 0.75em;
+  width: 1cap;
 }
 
 body {
