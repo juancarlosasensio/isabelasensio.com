@@ -613,6 +613,336 @@ if ('customElements' in window) {
   customElements.define('cover-l', Cover);
 }
 
+/**
+ * @module grid-l
+ * @description
+ * A custom element for creating a responsive grid using the CSS Grid module
+ * @property {string} min=250px A CSS length value representing x in `minmax(min(x, 100%), 1fr)`
+ * @property {string} space=var(--s1) The space between grid cells
+ */
+class Grid extends HTMLElement {
+  constructor() {
+    super();
+    this.render = () => {
+      this.i = `Grid-${[this.min, this.space].join('')}`;
+      this.dataset.i = this.i;
+      if (!document.getElementById(this.i)) {
+        let styleEl = document.createElement('style');
+        styleEl.id = this.i;
+        styleEl.innerHTML = `
+          [data-i="${this.i}"] {
+            grid-gap: ${this.space};
+          }
+
+          @supports (width: min(${this.min}, 100%)) {
+            [data-i="${this.i}"] {
+              grid-template-columns: repeat(auto-fill, minmax(min(${this.min}, 100%), 1fr));
+            }
+          }
+        `.replace(/\s\s+/g, ' ').trim();
+        document.head.appendChild(styleEl);
+      }
+    }
+  }
+
+  get min() {
+    return this.getAttribute('min') || '250px';
+  }
+
+  set min(val) {
+    return this.setAttribute('min', val);
+  }
+
+  get space() {
+    return this.getAttribute('space') || 'var(--s1)';
+  }
+
+  set space(val) {
+    return this.setAttribute('space', val);
+  }
+
+  static get observedAttributes() {
+    return ['min', 'space'];
+  }
+
+  connectedCallback() {
+    this.render();
+  }
+
+  attributeChangedCallback() {
+    this.render();
+  }
+}
+
+if ('customElements' in window) {
+  customElements.define('grid-l', Grid);
+}
+
+/**
+ * @module frame-l
+ * @description
+ * A custom element for augmenting image ratios
+ * @property {string} ratio=16:9 The element's aspect ratio
+ */
+class Frame extends HTMLElement {
+  constructor() {
+    super();
+    this.render = () => {
+      if (this.children.length !== 1) {
+        console.warn('<frame-l> elements should have just one child element');
+      }
+      this.i = `Frame-${[this.ratio].join('')}`;
+      this.dataset.i = this.i;
+      if (!document.getElementById(this.i)) {
+        let ratio = this.ratio.split(':');
+        let styleEl = document.createElement('style');
+        styleEl.id = this.i;
+        styleEl.innerHTML = `
+          [data-i="${this.i}"] {
+            padding-bottom: calc(${ratio[1]} / ${ratio[0]} * 100%);
+          }
+        `.replace(/\s\s+/g, ' ').trim();
+        document.head.appendChild(styleEl);
+      }
+    }
+  }
+
+  get ratio() {
+    return this.getAttribute('ratio') || '16:9';
+  }
+
+  set ratio(val) {
+    return this.setAttribute('ratio', val);
+  }
+
+  static get observedAttributes() {
+    return ['ratio'];
+  }
+
+  connectedCallback() {
+    this.render();
+  }
+
+  attributeChangedCallback() {
+    this.render();
+  }
+}
+
+if ('customElements' in window) {
+  customElements.define('frame-l', Frame);
+}
+
+/**
+ * @module reel-l
+ * @description
+ * A custom element for creating a responsive grid using the CSS Grid module
+ * @property {string} itemWidth=auto The width of each item (child element) in the Reel
+ * @property {string} space=var(--s0) The space between Reel items (child elements)
+ * @property {string} height=auto The height of the Reel itself
+ * @property {boolean} noBar=false Whether to display the scrollbar
+ */
+class Reel extends HTMLElement {
+  constructor() {
+    super();
+    this.render = () => {
+      this.i = `Reel-${[this.itemWidth, this.height, this.space, this.noBar].join('')}`;
+      this.dataset.i = this.i;
+      if (!document.getElementById(this.i)) {
+        let styleEl = document.createElement('style');
+        styleEl.id = this.i;
+        styleEl.innerHTML = `
+          [data-i="${this.i}"] {
+            height: ${this.height};
+          }
+      
+          [data-i="${this.i}"] > * {
+            flex: 0 0 ${this.itemWidth};
+          }
+      
+          [data-i="${this.i}"] > img {
+            height: 100%;
+            flex-basis: auto;
+            width: auto;
+          }
+      
+          [data-i="${this.i}"] > * + * {
+            margin-left: ${this.space};
+          }
+      
+          [data-i="${this.i}"].overflowing {
+            ${!this.noBar ?
+            `padding-bottom: ${this.space}`
+            : ''}
+          }
+      
+          ${this.noBar ? `
+          [data-i="${this.i}"] {
+            scrollbar-width: none;
+          }
+          
+          [data-i="${this.i}"]::-webkit-scrollbar {
+            display: none;
+          }
+          ` : ''}
+        `.replace(/\s\s+/g, ' ').trim();
+        document.head.appendChild(styleEl);
+      }
+    }
+  }
+
+  toggleOverflowClass(elem) {
+    elem.classList.toggle('overflowing', this.scrollWidth > this.clientWidth);
+  }
+
+  get itemWidth() {
+    return this.getAttribute('itemWidth') || 'auto';
+  }
+
+  set itemWidth(val) {
+    return this.setAttribute('itemWidth', val);
+  }
+
+  get height() {
+    return this.getAttribute('height') || 'auto';
+  }
+
+  set height(val) {
+    return this.setAttribute('height', val);
+  }
+
+  get space() {
+    return this.getAttribute('space') || 'var(--s0)';
+  }
+
+  set space(val) {
+    return this.setAttribute('space', val);
+  }
+
+  get noBar() {
+    return this.hasAttribute('noBar');
+  }
+
+  set noBar(val) {
+    if (val) {
+      this.setAttribute('noBar', '');
+    } else {
+      this.removeAttribute('noBar');
+    }
+  }
+
+  static get observedAttributes() {
+    return ['itemWidth', 'height', 'space', 'noBar'];
+  }
+
+  connectedCallback() {
+    this.render();
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(entries => {
+        console.log('resize');
+        this.toggleOverflowClass(entries[0].target);
+      }).observe(this);
+    }
+
+    if ('MutationObserver' in window) {
+      new MutationObserver(entries => {
+        this.toggleOverflowClass(entries[0].target);
+      }).observe(this, { childList: true });
+    }
+  }
+
+  attributeChangedCallback() {
+    this.render();
+  }
+}
+
+if ('customElements' in window) {
+  customElements.define('reel-l', Reel);
+}
+
+/**
+ * @module imposter-l
+ * @description
+ * A custom element to be positioned absolutely over any element
+ * @property {boolean} breakout=false Whether the element is allowed to break out of the container over which it is positioned
+ * @property {string} margin=0 The minimum space between the element and the inside edges of the positioning container over which it is placed (where `breakout` is not applied)
+  * @property {boolean} fixed=false Whether to position the element relative to the viewport
+ */
+class Imposter extends HTMLElement {
+  constructor() {
+    super();
+    this.render = () => {
+      this.i = `Imposter-${[this.breakout, this.fixed, this.margin].join('')}`;
+      this.dataset.i = this.i;
+      let margin = this.margin === '0' ? '0px' : this.margin;
+      if (!document.getElementById(this.i) && (!this.breakout || this.fixed)) {
+        let styleEl = document.createElement('style');
+        styleEl.id = this.i;
+        styleEl.innerHTML = `
+          [data-i="${this.i}"] {
+            ${!this.breakout ? `
+              max-width: calc(100% - (${margin} * 2));
+              max-height: calc(100% - (${margin} * 2));
+              overflow: auto;`
+            : ''}
+            ${this.fixed ? `
+              position: fixed;`
+            : ''}
+          }
+        `.replace(/\s\s+/g, ' ').trim();
+        document.head.appendChild(styleEl);
+      }
+    }
+  }
+
+  get breakout() {
+    return this.hasAttribute('breakout');
+  }
+
+  set breakout(val) {
+    if (val) {
+      return this.setAttribute('breakout', '');
+    } else {
+      return this.removeAttribute('breakout');
+    }
+  }
+
+  get fixed() {
+    return this.hasAttribute('fixed');
+  }
+
+  set fixed(val) {
+    if (val) {
+      return this.setAttribute('fixed', '');
+    } else {
+      return this.removeAttribute('fixed');
+    }
+  }
+
+  get margin() {
+    return this.getAttribute('margin') || '0px';
+  }
+
+  set margin(val) {
+    return this.setAttribute('margin', val);
+  }
+
+  static get observedAttributes() {
+    return ['breakout', 'margin'];
+  }
+
+  connectedCallback() {
+    this.render();
+  }
+
+  attributeChangedCallback() {
+    this.render();
+  }
+}
+
+if ('customElements' in window) {
+  customElements.define('imposter-l', Imposter);
+}
+
 // Utils
 function ready(fn) {
   if (document.readyState != 'loading'){
