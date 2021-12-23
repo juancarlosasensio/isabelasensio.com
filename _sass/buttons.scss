@@ -16,4 +16,10 @@ button {
   background-color: var(--black);
   padding: var(--s-1) var(--s2);
   border-width: var(--border-thin);
+
+  &.invert-colors {
+    background-color: var(--color-light);
+    color: var(--color-dark);
+  }
 }
+
